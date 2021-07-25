@@ -3,6 +3,7 @@ package database
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 )
@@ -51,6 +52,26 @@ func NewStateFromDisk() (*State, error) {
 	return state, nil
 }
 
-func (s *State) apply(tx Transaction) error {
+func (s *State) Add(tx Transaction) error {
+	if err := s.apply(tx); err != nil {
+		return err
+	}
+	s.txMempool = append(s.txMempool, tx)
+	return nil
+}
 
+func (s *State) apply(tx Transaction) error {
+	if tx.IsReward() {
+		s.Balances[tx.To] += tx.Value
+		return nil
+	}
+
+	if tx.Value > s.Balances[tx.From] {
+		return fmt.Errorf("insufficient balance")
+	}
+
+	s.Balances[tx.From] -= tx.Value
+	s.Balances[tx.To] += tx.Value
+
+	return nil
 }
