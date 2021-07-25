@@ -75,3 +75,22 @@ func (s *State) apply(tx Transaction) error {
 
 	return nil
 }
+
+func (s *State) Persist() error {
+	mempool := make([]Transaction, len(s.txMempool))
+	copy(mempool, s.txMempool)
+
+	for i := 0; i < len(mempool); i++ {
+		txJson, err := json.Marshal(mempool[i])
+		if err != nil {
+			return err
+		}
+
+		if _, err = s.dbFile.Write(append(txJson, '\n')); err != nil {
+			return err
+		}
+
+		s.txMempool = s.txMempool[1:]
+	}
+	return nil
+}
