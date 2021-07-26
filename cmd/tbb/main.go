@@ -16,6 +16,7 @@ func main() {
 	}
 
 	tbbCmd.AddCommand(versionCmd)
+	tbbCmd.AddCommand(balancesCmd())
 
 	err := tbbCmd.Execute()
 
@@ -23,4 +24,8 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+}
+
+func incorrectUsageError() error {
+	return fmt.Errorf("invalid usage")
 }
