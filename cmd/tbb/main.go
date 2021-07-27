@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/spf13/cobra"
+	"vertchain.com/tbb/database"
 )
 
 func main() {
@@ -16,7 +17,12 @@ func main() {
 	}
 
 	if _, err := os.Stat(filepath.Join(path, "database", "genesis.json")); os.IsNotExist(err) {
-		os.Create(filepath.Join(path, "database", "genesis.json"))
+		data := map[database.Account]uint{
+			"Anurag": 100000,
+			"Doge":   100000,
+			"Cheems": 100000,
+		}
+		database.InitializeGenesis(data)
 	}
 
 	if _, err := os.Stat(filepath.Join(path, "database", "state.json")); os.IsNotExist(err) {

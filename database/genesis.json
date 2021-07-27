@@ -1,7 +1,9 @@
 {
-    "genesis_time": "2019-03-18T00:00:00.000000000Z",
+    "genesis_time": "2021-07-28T03:35:04.4161317+05:30",
     "chain_id": "the-blockchain-bar-ledger",
     "balances": {
-        "andrej": 1000000
+        "Anurag": 100000,
+        "Cheems": 100000,
+        "Doge": 100000
     }
 }
