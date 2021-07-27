@@ -70,10 +70,10 @@ func txAddCmd() *cobra.Command {
 	cmd.MarkFlagRequired(flagFrom)
 
 	cmd.Flags().String(flagTo, "", "Account to send tokens to")
-	cmd.MarkFlagRequired(flagFrom)
+	cmd.MarkFlagRequired(flagTo)
 
-	cmd.Flags().String(flagAmount, "", "Amount of tokens to send")
-	cmd.MarkFlagRequired(flagFrom)
+	cmd.Flags().Uint(flagAmount, 0, "Amount of tokens to send")
+	cmd.MarkFlagRequired(flagAmount)
 
 	cmd.Flags().String(flagData, "", "Possible values: 'reward'")
 
