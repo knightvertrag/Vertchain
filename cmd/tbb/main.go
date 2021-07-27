@@ -3,11 +3,26 @@ package main
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 )
 
 func main() {
+
+	path, _ := os.Getwd()
+	if _, err := os.Stat(filepath.Join(path, "database", "tx.db")); os.IsNotExist(err) {
+		os.Create(filepath.Join(path, "database", "tx.db"))
+	}
+
+	if _, err := os.Stat(filepath.Join(path, "database", "genesis.json")); os.IsNotExist(err) {
+		os.Create(filepath.Join(path, "database", "genesis.json"))
+	}
+
+	if _, err := os.Stat(filepath.Join(path, "database", "state.json")); os.IsNotExist(err) {
+		os.Create(filepath.Join(path, "database", "state.json"))
+	}
+
 	var tbbCmd = &cobra.Command{
 		Use:   "tbb",
 		Short: "The Blockchain Bar CLI",
