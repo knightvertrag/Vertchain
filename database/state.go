@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -13,6 +14,20 @@ type State struct {
 	txMempool []Transaction
 
 	dbFile *os.File
+}
+
+func InitializeState() error {
+	current_path, _ := os.Getwd()
+	os.Create(filepath.Join(current_path, "database", "state.json"))
+	genesisFile, _ := ioutil.ReadFile(filepath.Join(current_path, "database", "genesis.json"))
+	var data genesis
+	if err := json.Unmarshal(genesisFile, &data); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+	to_write, _ := json.MarshalIndent(data, "", "    ")
+	err := ioutil.WriteFile(filepath.Join(current_path, "database", "state.json"), to_write, 0644)
+	return err
 }
 
 func NewStateFromDisk() (*State, error) {

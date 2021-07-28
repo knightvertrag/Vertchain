@@ -11,12 +11,12 @@ import (
 
 func main() {
 
-	path, _ := os.Getwd()
-	if _, err := os.Stat(filepath.Join(path, "database", "tx.db")); os.IsNotExist(err) {
-		os.Create(filepath.Join(path, "database", "tx.db"))
+	current_path, _ := os.Getwd()
+	if _, err := os.Stat(filepath.Join(current_path, "database", "tx.db")); os.IsNotExist(err) {
+		os.Create(filepath.Join(current_path, "database", "tx.db"))
 	}
 
-	if _, err := os.Stat(filepath.Join(path, "database", "genesis.json")); os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(current_path, "database", "genesis.json")); os.IsNotExist(err) {
 		data := map[database.Account]uint{
 			"Anurag": 100000,
 			"Doge":   100000,
@@ -25,8 +25,8 @@ func main() {
 		database.InitializeGenesis(data)
 	}
 
-	if _, err := os.Stat(filepath.Join(path, "database", "state.json")); os.IsNotExist(err) {
-		os.Create(filepath.Join(path, "database", "state.json"))
+	if _, err := os.Stat(filepath.Join(current_path, "database", "state.json")); os.IsNotExist(err) {
+		database.InitializeState()
 	}
 
 	var tbbCmd = &cobra.Command{

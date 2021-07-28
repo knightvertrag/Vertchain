@@ -19,9 +19,9 @@ type genesis struct {
 }
 
 func InitializeGenesis(holders map[Account]uint) error {
-	path, _ := os.Getwd()
+	current_path, _ := os.Getwd()
 	genesisTime := time.Now()
-	os.Create(filepath.Join(path, "database", "genesis.json"))
+	os.Create(filepath.Join(current_path, "database", "genesis.json"))
 	balances := holders
 	data := genesisFile{
 		GenesisTime: genesisTime,
@@ -29,7 +29,7 @@ func InitializeGenesis(holders map[Account]uint) error {
 		Balances:    balances,
 	}
 	file, err := json.MarshalIndent(data, "", "    ")
-	ioutil.WriteFile(filepath.Join(path, "database", "genesis.json"), file, 0644)
+	ioutil.WriteFile(filepath.Join(current_path, "database", "genesis.json"), file, 0644)
 	return err
 }
 
