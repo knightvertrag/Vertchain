@@ -8,12 +8,6 @@ import (
 	"time"
 )
 
-type genesisFile struct {
-	GenesisTime time.Time        `json:"genesis_time"`
-	Chain_Id    string           `json:"chain_id"`
-	Balances    map[Account]uint `json:"balances"`
-}
-
 type genesis struct {
 	Balances map[Account]uint `json:"balances"`
 }
@@ -23,7 +17,11 @@ func InitializeGenesis(holders map[Account]uint) error {
 	genesisTime := time.Now()
 	os.Create(filepath.Join(current_path, "database", "genesis.json"))
 	balances := holders
-	data := genesisFile{
+	data := struct {
+		GenesisTime time.Time        `json:"genesis_time"`
+		Chain_Id    string           `json:"chain_id"`
+		Balances    map[Account]uint `json:"balances"`
+	}{
 		GenesisTime: genesisTime,
 		Chain_Id:    "the-blockchain-bar-ledger",
 		Balances:    balances,
