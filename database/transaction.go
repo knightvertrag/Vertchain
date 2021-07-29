@@ -7,14 +7,14 @@ func NewAccount(value string) Account {
 }
 
 type Transaction struct {
-	From  Account `json:"from"`
-	To    Account `json:"to"`
-	Value uint    `json:"value"`
-	Data  string  `json:"data"`
+	From   Account `json:"from"`
+	To     Account `json:"to"`
+	Amount uint    `json:"value"`
+	Data   string  `json:"data"`
 }
 
-func NewTransaction(from Account, to Account, value uint, data string) Transaction {
-	return Transaction{from, to, value, data}
+func NewTransaction(from Account, to Account, amount uint, data string) Transaction {
+	return Transaction{from, to, amount, data}
 }
 
 func (t Transaction) IsReward() bool {

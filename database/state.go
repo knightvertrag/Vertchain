@@ -97,16 +97,16 @@ func (s *State) Add(tx Transaction) error {
 
 func (s *State) apply(tx Transaction) error {
 	if tx.IsReward() {
-		s.Balances[tx.To] += tx.Value
+		s.Balances[tx.To] += tx.Amount
 		return nil
 	}
 
-	if tx.Value > s.Balances[tx.From] {
+	if tx.Amount > s.Balances[tx.From] {
 		return fmt.Errorf("insufficient balance")
 	}
 
-	s.Balances[tx.From] -= tx.Value
-	s.Balances[tx.To] += tx.Value
+	s.Balances[tx.From] -= tx.Amount
+	s.Balances[tx.To] += tx.Amount
 
 	return nil
 }
