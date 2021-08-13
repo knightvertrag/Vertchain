@@ -12,8 +12,8 @@ import (
 func main() {
 
 	current_path, _ := os.Getwd()
-	if _, err := os.Stat(filepath.Join(current_path, "database", "tx.db")); os.IsNotExist(err) {
-		os.Create(filepath.Join(current_path, "database", "tx.db"))
+	if _, err := os.Stat(filepath.Join(current_path, "database", "block.db")); os.IsNotExist(err) {
+		os.Create(filepath.Join(current_path, "database", "block.db"))
 	}
 
 	if _, err := os.Stat(filepath.Join(current_path, "database", "genesis.json")); os.IsNotExist(err) {
