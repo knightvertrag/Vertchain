@@ -1,6 +1,6 @@
-# The Blockchain Bar 
+# Doge's Pub
 
-The idea of a blockchain bar with a community powered spin. Tokens give more power to members, including voting rights on new events, menu items and infrastructure.
+The idea of a blockchain powered closed economy with power in the hands of the stakeholders. Tokens give more power to members, including voting rights on new events, menu items and infrastructure.
 
 ## Build Instructions
 
