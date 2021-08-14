@@ -9,7 +9,7 @@ func NewAccount(value string) Account {
 type Transaction struct {
 	From   Account `json:"from"`
 	To     Account `json:"to"`
-	Amount uint    `json:"value"`
+	Amount uint    `json:"Amount"`
 	Data   string  `json:"data"`
 }
 

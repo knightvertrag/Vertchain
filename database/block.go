@@ -8,11 +8,11 @@ import (
 
 type Hash [32]byte
 
-func (h Hash) Encode() ([]byte, error) {
+func (h Hash) MarshalText() ([]byte, error) {
 	return []byte(hex.EncodeToString(h[:])), nil
 }
 
-func (h *Hash) Decode(data []byte) error {
+func (h *Hash) UnmarshalText(data []byte) error {
 	_, err := hex.Decode(h[:], data)
 	return err
 }
@@ -36,8 +36,8 @@ func NewBlock(parent Hash, time uint64, txs []Transaction) Block {
 	return Block{BlockHeader{parent, time}, txs}
 }
 
-func (block Block) Hash() (Hash, error) {
-	blockJSON, err := json.Marshal(block)
+func (b Block) Hash() (Hash, error) {
+	blockJSON, err := json.Marshal(b)
 	if err != nil {
 		return Hash{}, nil
 	}
