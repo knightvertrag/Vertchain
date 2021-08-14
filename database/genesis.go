@@ -12,11 +12,16 @@ type genesis struct {
 	Balances map[Account]uint `json:"balances"`
 }
 
-func InitializeGenesis(holders map[Account]uint) error {
+func writeGenesisToDisk(path string) error {
+	genesis := map[Account]uint{
+		"Anurag": 100000,
+		"Doge":   100000,
+		"Cheems": 100000,
+	}
 	current_path, _ := os.Getwd()
 	genesisTime := time.Now()
 	os.Create(filepath.Join(current_path, "database", "genesis.json"))
-	balances := holders
+	balances := genesis
 	data := struct {
 		GenesisTime time.Time        `json:"genesis_time"`
 		Chain_Id    string           `json:"chain_id"`
@@ -26,8 +31,8 @@ func InitializeGenesis(holders map[Account]uint) error {
 		Chain_Id:    "the-blockchain-bar-ledger",
 		Balances:    balances,
 	}
-	file, err := json.MarshalIndent(data, "", "    ")
-	ioutil.WriteFile(filepath.Join(current_path, "database", "genesis.json"), file, 0644)
+	genesisJson, err := json.MarshalIndent(data, "", "    ")
+	ioutil.WriteFile(path, genesisJson, 0644)
 	return err
 }
 
