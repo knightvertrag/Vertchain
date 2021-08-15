@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"vertchain.com/tbb/node"
+	"vertchain.com/dop/node"
 )
 
 func runCmd() *cobra.Command {

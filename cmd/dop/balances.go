@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"vertchain.com/tbb/database"
+	"vertchain.com/dop/database"
 )
 
 func balancesCmd() *cobra.Command {

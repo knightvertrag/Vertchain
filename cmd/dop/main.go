@@ -12,8 +12,8 @@ const flagDataDir = "datadir"
 func main() {
 
 	var tbbCmd = &cobra.Command{
-		Use:   "tbb",
-		Short: "The Blockchain Bar CLI",
+		Use:   "dop",
+		Short: "The Doge's Pub CLI",
 		Run: func(cmd *cobra.Command, args []string) {
 		},
 	}

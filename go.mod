@@ -1,4 +1,4 @@
-module vertchain.com/tbb
+module vertchain.com/dop
 
 go 1.16
 
