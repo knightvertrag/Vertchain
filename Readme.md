@@ -15,11 +15,16 @@ git clone https://github.com/knightvertrag/Vertchain.git
 3. Build the CLI binary using 
 
 ```bash
-go build ./cmd/tbb
+go build ./cmd/dop
 ```
 
+4. Run the server using 
+
+```bash
+./dop run --datadir="path/to/database/directory"
+```
 Display the available commands using 
 
 ```bash
-./tbb help
+./dop help
 ```
