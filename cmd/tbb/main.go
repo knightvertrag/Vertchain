@@ -30,6 +30,7 @@ func main() {
 	}
 }
 
+//Add datadir flag and mark it as required to cmd
 func addDefaultRequiredFlags(cmd *cobra.Command) {
 	cmd.Flags().String(flagDataDir, "", "Absolute path to the node data dir where the DB will be/is stored")
 	cmd.MarkFlagRequired(flagDataDir)

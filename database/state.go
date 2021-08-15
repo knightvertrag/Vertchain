@@ -4,9 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
-	"path/filepath"
 	"time"
 )
 
@@ -16,15 +14,6 @@ type State struct {
 
 	dbFile          *os.File
 	latestBlockHash Hash
-}
-
-func InitializeState() error {
-	current_path, _ := os.Getwd()
-	os.Create(filepath.Join(current_path, "database", "state.json"))
-	data, _ := loadGenesis(filepath.Join(current_path, "database", "genesis.json"))
-	to_write, _ := json.MarshalIndent(data, "", "    ")
-	err := ioutil.WriteFile(filepath.Join(current_path, "database", "state.json"), to_write, 0644)
-	return err
 }
 
 func NewStateFromDisk(dataDir string) (*State, error) {
@@ -76,6 +65,7 @@ func (s *State) LatestBlockHash() Hash {
 	return s.latestBlockHash
 }
 
+// Iterate through all transactions in block b and add them to state
 func (s *State) AddBlock(b Block) error {
 	for _, tx := range b.TXs {
 		if err := s.AddTx(tx); err != nil {
@@ -86,6 +76,7 @@ func (s *State) AddBlock(b Block) error {
 	return nil
 }
 
+// Apply transaction tx to state and append to current state mempool
 func (s *State) AddTx(tx Transaction) error {
 	if err := s.apply(tx); err != nil {
 		return err
@@ -94,6 +85,7 @@ func (s *State) AddTx(tx Transaction) error {
 	return nil
 }
 
+// Modify balances in current state to reflect transaction tx
 func (s *State) apply(tx Transaction) error {
 	if tx.IsReward() {
 		s.Balances[tx.To] += tx.Amount
@@ -110,6 +102,7 @@ func (s *State) apply(tx Transaction) error {
 	return nil
 }
 
+// Append latest block information to database
 func (s *State) Persist() (Hash, error) {
 	block := NewBlock(s.latestBlockHash, uint64(time.Now().Unix()), s.txMempool)
 	blockHash, err := block.Hash()
@@ -138,6 +131,7 @@ func (s *State) Persist() (Hash, error) {
 
 }
 
+// Iterate through all transactions in block b and apply them to current state
 func (s *State) applyBlock(b Block) error {
 	for _, tx := range b.TXs {
 		if err := s.apply(tx); err != nil {

@@ -31,6 +31,7 @@ type TxAddRes struct {
 	Hash database.Hash `json:"block_hash"`
 }
 
+// Start the server with datadir as the database directory
 func Run(dataDir string) error {
 	fmt.Printf("Listening on HTTP port: %d\n", httpPort)
 
@@ -40,26 +41,28 @@ func Run(dataDir string) error {
 	}
 	defer state.Close()
 
-	http.HandleFunc("/balances/list", func(w http.ResponseWriter, r *http.Request) {
-		listBalancesHandler(w, r, state)
+	http.HandleFunc("/balances/list", func(rw http.ResponseWriter, r *http.Request) {
+		listBalancesHandler(rw, r, state)
 	})
 
-	http.HandleFunc("/tx/add", func(w http.ResponseWriter, r *http.Request) {
-		txAddHandler(w, r, state)
+	http.HandleFunc("/tx/add", func(rw http.ResponseWriter, r *http.Request) {
+		txAddHandler(rw, r, state)
 	})
 
 	return http.ListenAndServe(fmt.Sprintf(":%d", httpPort), nil)
 }
 
-func listBalancesHandler(w http.ResponseWriter, r *http.Request, state *database.State) {
-	writeRes(w, BalancesRes{state.LatestBlockHash(), state.Balances})
+// Handler to write all user balances to response
+func listBalancesHandler(rw http.ResponseWriter, r *http.Request, state *database.State) {
+	writeRes(rw, BalancesRes{state.LatestBlockHash(), state.Balances})
 }
 
-func txAddHandler(w http.ResponseWriter, r *http.Request, state *database.State) {
+// Handler to add transaction and write block hash to response
+func txAddHandler(rw http.ResponseWriter, r *http.Request, state *database.State) {
 	req := TxAddReq{}
 	err := readReq(r, &req)
 	if err != nil {
-		writeErrRes(w, err)
+		writeErrRes(rw, err)
 		return
 	}
 
@@ -67,38 +70,41 @@ func txAddHandler(w http.ResponseWriter, r *http.Request, state *database.State)
 
 	err = state.AddTx(tx)
 	if err != nil {
-		writeErrRes(w, err)
+		writeErrRes(rw, err)
 		return
 	}
 
 	hash, err := state.Persist()
 	if err != nil {
-		writeErrRes(w, err)
+		writeErrRes(rw, err)
 		return
 	}
 
-	writeRes(w, TxAddRes{hash})
+	writeRes(rw, TxAddRes{hash})
 }
 
-func writeErrRes(w http.ResponseWriter, err error) {
+// Write error to response
+func writeErrRes(rw http.ResponseWriter, err error) {
 	jsonErrRes, _ := json.Marshal(ErrRes{err.Error()})
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusInternalServerError)
-	w.Write(jsonErrRes)
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusInternalServerError)
+	rw.Write(jsonErrRes)
 }
 
-func writeRes(w http.ResponseWriter, content interface{}) {
+// Marshal content to json and write it to response
+func writeRes(rw http.ResponseWriter, content interface{}) {
 	contentJson, err := json.Marshal(content)
 	if err != nil {
-		writeErrRes(w, err)
+		writeErrRes(rw, err)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(contentJson)
+	rw.Header().Set("Content-Type", "application/json")
+	rw.WriteHeader(http.StatusOK)
+	rw.Write(contentJson)
 }
 
+// Unmarshal request body and put in reqBody
 func readReq(r *http.Request, reqBody interface{}) error {
 	reqBodyJson, err := ioutil.ReadAll(r.Body)
 	if err != nil {
